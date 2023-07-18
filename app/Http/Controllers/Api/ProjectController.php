@@ -13,9 +13,12 @@ class ProjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $projects = Project::with('type', 'technologies')->paginate(5);
+        //filtro risultati ricerca
+        $searchString = $request->query('q', '');
+
+        $projects = Project::with('type', 'technologies')->where('title', 'LIKE', "%" . $searchString . "%")->paginate(6);
         return response()->json($projects);
     }
 
